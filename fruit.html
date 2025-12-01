@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水果中英學習器 - Fruit Learner</title>
+    <style>
+        /* 基礎樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #fruit-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .fruit-item {
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 10px;
+            transition: all 0.2s;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 150px; /* 固定寬度 */
+        }
+
+        .fruit-item:hover {
+            border-color: #ff5722; /* 點擊前懸停效果 */
+            transform: translateY(-5px);
+        }
+
+        .fruit-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* 顯示區樣式 */
+        #display-box {
+            margin-top: 40px;
+            padding: 20px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            background-color: #eaf6ff;
+            min-height: 80px;
+            transition: opacity 0.5s;
+        }
+
+        #display-box p {
+            font-size: 1.5em;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        
+        #display-box .chinese {
+            color: #007bff;
+        }
+
+        #display-box .english {
+            color: #ff5722;
+        }
+
+        /* 圖片替代說明：由於 HTML 無法直接嵌入圖片，我們使用文字替代，
+           請將此文字替換為實際的圖片連結或 Base64 編碼的圖片 */
+        .img-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #cccccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: #555;
+            font-size: 0.9em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🍎 水果中英學習器</h1>
+    <p>點擊下方任一水果圖片，系統將會語音念出英文並顯示中英名稱。</p>
+
+    <div id="display-box">
+        <p>點擊一個水果開始學習...</p>
+    </div>
+
+    <div id="fruit-grid">
+        <div class="fruit-item" data-english="Apple" data-chinese="蘋果">
+            <div class="img-placeholder">蘋果 (Apple)</div>
+        </div>
+
+        <div class="fruit-item" data-english="Banana" data-chinese="香蕉">
+            <div class="img-placeholder">香蕉 (Banana)</div>
+        </div>
+        
+        <div class="fruit-item" data-english="Orange" data-chinese="橘子">
+            <div class="img-placeholder">橘子 (Orange)</div>
+        </div>
+        
+        <div class="fruit-item" data-english="Grape" data-chinese="葡萄">
+            <div class="img-placeholder">葡萄 (Grape)</div>
+        </div>
+        
+        <div class="fruit-item" data-english="Strawberry" data-chinese="草莓">
+            <div class="img-placeholder">草莓 (Strawberry)</div>
+        </div>
+        
+        <div class="fruit-item" data-english="Pineapple" data-chinese="鳳梨">
+            <div class="img-placeholder">鳳梨 (Pineapple)</div>
+        </div>
+        
+        <div class="fruit-item" data-english="Watermelon" data-chinese="西瓜">
+            <div class="img-placeholder">西瓜 (Watermelon)</div>
+        </div>
+        
+        <div class="fruit-item" data-english="Mango" data-chinese="芒果">
+            <div class="img-placeholder">芒果 (Mango)</div>
+        </div>
+
+        <div class="fruit-item" data-english="Kiwi" data-chinese="奇異果">
+            <div class="img-placeholder">奇異果 (Kiwi)</div>
+        </div>
+    </div>
+
+    <script>
+        const fruitItems = document.querySelectorAll('.fruit-item');
+        const displayBox = document.getElementById('display-box');
+        const synth = window.speechSynthesis; // 獲取語音合成物件
+
+        /**
+         * 播放英文名稱
+         * @param {string} textToSpeak - 要發音的英文單詞
+         */
+        function speakEnglish(textToSpeak) {
+            // 檢查瀏覽器是否支持語音合成
+            if (!synth) {
+                console.error("您的瀏覽器不支持 Web Speech API.");
+                alert("抱歉，您的瀏覽器不支持語音播放功能。");
+                return;
+            }
+
+            // 如果正在說話，取消當前的語音
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            // 創建一個新的語音實例
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+            // 設置發音語言為英文 (en-US 是美式英文)
+            utterance.lang = 'en-US'; 
+            
+            // 設置音量、語速和音高 (可選，可調整發音效果)
+            utterance.volume = 1.0; 
+            utterance.rate = 1.0; 
+            utterance.pitch = 1.0; 
+
+            // 執行發音
+            synth.speak(utterance);
+        }
+
+        // 為每個水果項目添加點擊監聽器
+        fruitItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 1. 取得資料
+                const englishName = item.getAttribute('data-english');
+                const chineseName = item.getAttribute('data-chinese');
+
+                // 2. 播放語音
+                speakEnglish(englishName);
+
+                // 3. 顯示中英名稱
+                displayBox.innerHTML = `
+                    <p class="chinese">中文：${chineseName}</p>
+                    <p class="english">英文：${englishName}</p>
+                `;
+
+                // 可選：添加點擊後視覺效果（例如變更邊框顏色）
+                fruitItems.forEach(i => i.style.borderColor = 'transparent');
+                item.style.borderColor = '#007bff';
+            });
+        });
+    </script>
+
+</body>
+</html>
