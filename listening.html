@@ -715,7 +715,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
         <div class="right-panel">
             <button class="action-btn btn-generate" onclick="generateNumber()">
-                <i class="fa-solid fa-play"></i> 產生題目 (10-99)
+                <i class="fa-solid fa-play"></i> 產生題目 (11-99)
             </button>
 
             <button class="action-btn btn-replay" onclick="speakNumber()">
@@ -787,7 +787,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
      * 產生隨機數字 (11-99) 並播放
      */
     function generateNumber() {
-        targetNumber = Math.floor(Math.random() * 90)+10;
+        targetNumber = Math.floor(Math.random() * 90)+11;
         
         const preview = document.getElementById('number-preview');
         preview.textContent = targetNumber;
